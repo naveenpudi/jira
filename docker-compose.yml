@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: backend_app
     ports:
-      - "8002:8002"
+      - "8000:8000"
     env_file:
       - ./backend/.env
     depends_on:
@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     container_name: frontend_app
     ports:
-      - "3007:3007"
+      - "3007:5173"
     depends_on:
       - backend
 
