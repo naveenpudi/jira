@@ -1,4 +1,3 @@
-
 name: Deploy with Docker Compose
 
 on:
@@ -20,10 +19,23 @@ jobs:
         host: ${{ secrets.SERVER_IP }}
         username: root
         key: ${{ secrets.SERVER_SSH_KEY }}
-        port: 22   # change if your server uses another SSH port
+        port: 22
         script: |
           cd /root/jira
+
+          # Pull latest changes from GitHub
           git fetch --all
           git reset --hard origin/main
+
+          # Create .env file inside backend/
+          cat > backend/.env << 'EOF'
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASS=${{ secrets.DB_PASS }}
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
+          EOF
+
+          # Restart containers with new env
           docker-compose down
           docker-compose up -d --build
+
