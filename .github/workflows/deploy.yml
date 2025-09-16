@@ -1,0 +1,32 @@
+name: Deploy with Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Deploy to server via SSH
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          # Go to your app directory
+          cd /path/to/your/project
+
+          # Pull latest changes from GitHub
+          git fetch --all
+          git reset --hard origin/main
+
+          # Build and start containers
+          docker-compose down
+          docker-compose up -d --build
