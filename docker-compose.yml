@@ -1,17 +1,39 @@
-version: '3.8'
+version: "3.9"
+
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend_app
     ports:
-      - '8000:8000'
-    environment:
-      - DATABASE_URL=sqlite:///./dev.db
-    volumes:
-      - ./backend:/app
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_app
     ports:
-      - '5173:5173'
-    command: npm run dev
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
     volumes:
-      - ./frontend:/app
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
