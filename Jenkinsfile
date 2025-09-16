@@ -10,26 +10,20 @@ pipeline {
 
         stage('Prepare Env') {
             steps {
-                sh '''
-                cat > backend/.env <<EOL
-                DATABASE_URL=postgresql://user:password@db:5432/mydb
-                SECRET_KEY=supersecret
-                EOL
-                '''
+                sh 'cat Dockerfile'
             }
         }
 
         stage('Build and Run with Docker Compose') {
             steps {
-                sh 'sudo docker compose up -d --build'
-
+                sh 'docker compose up -d --build'
             }
         }
     }
 
     post {
         always {
-            sh 'sudo docker compose down'
+            sh 'docker compose down'
         }
     }
 }
