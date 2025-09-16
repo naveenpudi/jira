@@ -21,14 +21,15 @@ pipeline {
 
         stage('Build and Run with Docker Compose') {
             steps {
-                sh 'docker compose up -d --build'
+                sh 'sudo docker compose up -d --build'
+
             }
         }
     }
 
     post {
         always {
-            sh 'docker compose down'
+            sh 'sudo docker compose down'
         }
     }
 }
