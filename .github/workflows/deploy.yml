@@ -21,7 +21,7 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
           # Go to your app directory
-          cd /path/to/your/project
+          cd /root/jira
 
           # Pull latest changes from GitHub
           git fetch --all
