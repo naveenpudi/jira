@@ -1,3 +1,4 @@
+
 name: Deploy with Docker Compose
 
 on:
@@ -17,16 +18,12 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
+        username: root
         key: ${{ secrets.SERVER_SSH_KEY }}
+        port: 22   # change if your server uses another SSH port
         script: |
-          # Go to your app directory
           cd /root/jira
-
-          # Pull latest changes from GitHub
           git fetch --all
           git reset --hard origin/main
-
-          # Rebuild and restart containers
           docker-compose down
           docker-compose up -d --build
