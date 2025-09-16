@@ -10,7 +10,17 @@ pipeline {
 
         stage('Prepare Env') {
             steps {
-                sh 'cat Dockerfile'
+                sh '''
+                    echo "Listing project files:"
+                    ls -la
+
+                    if [ -f Dockerfile ]; then
+                        echo "Found Dockerfile:"
+                        cat Dockerfile
+                    else
+                        echo "⚠️ No Dockerfile found in project root"
+                    fi
+                '''
             }
         }
 
@@ -23,7 +33,8 @@ pipeline {
 
     post {
         always {
-            sh 'docker compose down'
+            sh 'docker compose down || true'
         }
     }
 }
+
